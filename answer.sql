@@ -1,25 +1,48 @@
--- 1. Retrieve checkNumber, paymentDate, and amount from the payments table
-SELECT checkNumber, paymentDate, amount
-FROM payments;
 
--- 2. Retrieve orderDate, requiredDate, and status of 'In Process' orders, sorted by orderDate descending
-SELECT orderDate, requiredDate, status
-FROM orders
-WHERE status = 'In Process'
-ORDER BY orderDate DESC;
+-- Creating the 1NF-compliant table
+CREATE TABLE ProductDetail_1NF (
+    OrderID INT,
+    CustomerName VARCHAR(100),
+    Product VARCHAR(50)
+);
 
--- 3. Display firstName, lastName, and email of 'Sales Rep' employees, ordered by employeeNumber descending
-SELECT firstName, lastName, email
-FROM employees
-WHERE jobTitle = 'Sales Rep'
-ORDER BY employeeNumber DESC;
+-- Inserting atomic values
+INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product) VALUES
+(101, 'John Doe', 'Laptop'),
+(101, 'John Doe', 'Mouse'),
+(102, 'Jane Smith', 'Tablet'),
+(102, 'Jane Smith', 'Keyboard'),
+(102, 'Jane Smith', 'Mouse'),
+(103, 'Emily Clark', 'Phone');
 
--- 4. Retrieve all columns and records from the offices table
-SELECT *
-FROM offices;
 
--- 5. Fetch productName and quantityInStock, sort by buyPrice ascending, limit to 5 records
-SELECT productName, quantityInStock
-FROM products
-ORDER BY buyPrice ASC
-LIMIT 5;
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    CustomerName VARCHAR(100)
+);
+
+INSERT INTO Orders (OrderID, CustomerName) VALUES
+(101, 'John Doe'),
+(102, 'Jane Smith'),
+(103, 'Emily Clark');
+
+
+
+
+CREATE TABLE OrderItems (
+    OrderID INT,
+    Product VARCHAR(50),
+    Quantity INT,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+INSERT INTO OrderItems (OrderID, Product, Quantity) VALUES
+(101, 'Laptop', 2),
+(101, 'Mouse', 1),
+(102, 'Tablet', 3),
+(102, 'Keyboard', 1),
+(102, 'Mouse', 2),
+(103, 'Phone', 1);
+
+
+
